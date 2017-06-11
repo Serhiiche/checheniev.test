@@ -1,0 +1,70 @@
+<?php
+
+define('WEBSERVICES_CONTROLLERS_CID', 'webservices:controllers');
+
+/**
+ * Implements hook_menu();
+ */
+function webservices_menu() {
+  $items = array();
+  $items['api'] = array(
+    'page callback' => 'webservices_controller',
+    'access arguments' => array('access web services'),
+    'file' => 'webservices.pages.inc',
+    'type' => MENU_CALLBACK,
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_permission();
+ */
+function webservices_permission() {
+  $permissions = array();
+
+  $permissions['access web services'] = array(
+    'title' => t('Access web services'),
+  );
+
+  return $permissions;
+}
+
+/**
+ * Implements hook_hook_info();
+ */
+function webservices_hook_info() {
+  $hooks = array();
+
+  $hooks['webservices_controller'] = array(
+    'group' => 'webservices',
+  );
+
+  return $hooks;
+}
+
+
+function webservices_get_controller($entity_type) {
+  $controllers = webservices_get_controllers();
+  if (isset($controllers[$entity_type])) {
+    return $controllers[$entity_type];
+  }
+  else {
+    return FALSE;
+  }
+}
+
+function webservices_get_controllers() {
+  $controllers = cache_get(WEBSERVICES_CONTROLLERS_CID);
+  if (empty($controllers)) {
+    $controllers = module_invoke_all('webservices_controller');
+
+    drupal_alter('webservices_controllers', $controllers);
+
+    cache_set(WEBSERVICES_CONTROLLERS_CID, $controllers);
+
+    return $controllers;
+  }
+  else {
+    return $controllers->data;
+  }
+}

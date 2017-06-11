@@ -1,0 +1,49 @@
+<?php
+
+function test_task_install() {
+  
+  $node_type_name='notes';
+  if (!node_type_load($node_type_name)) {
+    $notes_c_type = array(
+        'type' => 'notes',
+        'name' => st('Notes'),
+        'base' => 'node_content',
+        'description' => st('This is custom content type for notes.'),
+        'custom' => TRUE,
+        'modified' => TRUE,
+        'locked' => FALSE,
+    );
+    $notes_c_type = node_type_set_defaults($notes_c_type);
+    node_type_save($notes_c_type);
+  }
+
+    // Create a custom field (link)
+    $fieldname='field_link';
+    if (!field_info_field($fieldname)) {
+      $field = array(
+       'field_name' => $fieldname,
+       'type' => 'link_field',
+       'cardinality' => 1,
+       'settings' => array(),
+       'entity_types' => array('node'),
+       );
+      field_create_field($field);
+    }
+
+    if (!field_info_instance('node', $fieldname, 'notes')) {
+      $instance = array(
+       'field_name' => $fieldname,
+       'entity_type' => 'node',
+       'bundle' => 'notes',
+       'label' => t('Link'),
+       'widget' => array(
+         'type' => 'link_field'
+        ),
+      );
+      field_create_instance($instance);
+    }
+}
+
+/*function test_task_uninstall() {
+  
+}*/

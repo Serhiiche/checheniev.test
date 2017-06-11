@@ -1,0 +1,12 @@
+name = Web services
+description = Provides API for building own REST web services.
+package = API
+core = 7.x
+
+files[] = includes/webservices.controller.inc
+files[] = includes/webservices.exception.inc
+files[] = includes/webservices.response.inc
+files[] = includes/webservices.entity.inc
+
+files[] = controllers/webservices.node.inc
+files[] = controllers/webservices.auth.inc

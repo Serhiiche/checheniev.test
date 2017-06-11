@@ -1,0 +1,146 @@
+<?php
+
+function test_task_theme($existing, $type, $theme, $path) {
+  return array(
+    'node__notes' => array(
+      'render element' => 'content',
+      'base hook' => 'node',
+      'template' => 'node--notes',
+      'path' => drupal_get_path('module', 'test_task') . '/templates',
+    ),
+  );
+}
+
+function test_task_block_info() {
+  $blocks['test_task_block'] = array(
+    'info' => t('Last 3 nodes (notes)'),
+    'status' => TRUE,
+    'region' => 'sidebar_first',
+    'cache' => DRUPAL_CACHE_PER_ROLE,
+  );
+  return $blocks;
+}
+
+function last_three_nodes(){
+
+  $nodes = db_select('node', 'n')
+  ->fields('n')
+  ->condition('n.type', 'notes')
+  ->condition('status', NODE_PUBLISHED)
+  ->orderBy('n.created', 'DESC')
+  ->range(0, 3)
+  ->execute()
+  ->fetchAll();
+
+  $nids = array();
+  foreach ($nodes as $obj) {
+    $nids[] = $obj->nid;
+  }
+  $nodeview = node_view_multiple(node_load_multiple($nids));
+
+  $result = drupal_render($nodeview);
+  return $result;
+}
+
+function test_task_block_view($delta = '') {
+  $block = array();
+  switch($delta){
+    case 'test_task_block':
+      $block['subject'] = t('Last 3 nodes (type = notes)');
+      if(user_access('access content')){
+        $block['content'] = last_three_nodes();
+      }
+	    break;
+  }
+  return $block;
+}
+
+/**
+ * Implements hook_views_api().
+ */
+function test_task_views_api() {
+  return array('api' => 3.0);
+}
+
+/**
+ * task 2. Integrate your module with Webform
+ *
+ * Implements hook_webform_select_options_info().
+ */
+function test_task_webform_select_options_info() {
+  $items = array();
+  $items['nodelist'] = array(
+    'title' => t('Custom list with nodes'),
+    'options callback' => 'webform_options_nodelist',
+  );
+  return $items;
+}
+
+function webform_options_nodelist() {
+  $nodes = db_select('node', 'n')
+  ->fields('n')
+  ->condition('n.type', 'notes')
+  ->condition('status', NODE_PUBLISHED)
+  ->orderBy('n.created', 'ASC')
+  //->range(0, 20)
+  ->execute()
+  ->fetchAll();
+
+  $n_titles = array();
+  foreach ($nodes as $obj) {
+    $n_titles[] = $obj->title;
+  }
+
+  $nodelist = array();
+
+  foreach ($n_titles as $value) {
+    array_push($nodelist, $value);
+  }
+
+  return $nodelist;
+}
+
+/**
+ * task 4 - custom pane
+ *
+ * Implements hook_ctools_plugin_directory().
+ */
+function test_task_ctools_plugin_directory($owner, $plugin_type) {
+  if ($owner == 'ctools' && $plugin_type == 'content_types') {
+    return 'plugins/' . $plugin_type;
+  }
+}
+
+function test_task_pane_custom_pane_edit_form($form, &$form_state) {
+  return $form;
+}
+
+function last_four_nodes(){
+
+  $nodes = db_select('node', 'n')
+  ->fields('n')
+  ->condition('n.type', 'notes')
+  ->condition('status', NODE_PUBLISHED)
+  ->orderBy('n.created', 'DESC')
+  ->range(0, 4)
+  ->execute()
+  ->fetchAll();
+
+  $nids = array();
+  foreach ($nodes as $obj) {
+    $nids[] = $obj->nid;
+  }
+  $nodeview = node_view_multiple(node_load_multiple($nids));
+
+  $result = drupal_render($nodeview);
+  return $result;
+}
+
+function test_task_pane_custom_pane_render($subtype, $conf, $args, $contexts) {
+
+  $block = new stdClass();
+  $block->title = t('Last 4 nodes (type = notes)');
+  $block->content = last_four_nodes();
+
+  return $block;
+}
