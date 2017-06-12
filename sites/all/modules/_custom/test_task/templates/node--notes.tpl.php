@@ -84,7 +84,7 @@
   print $classes.' '; 
   if($view_mode == 'teaser') {print $zebra;} 
   if($view_mode == 'full') {
-    $node->nid % 2 == 0 ? print 'even' : print 'odd';
+    $node->nid % 2 == 0 ? print 'even' : print 'odd'; //implement 'odd/even'
   } 
 ?> clearfix"<?php print $attributes; ?>>
 
@@ -116,7 +116,8 @@
   <?php if ($view_mode == 'full'): ?>
   	<hr />
     <div class="under">
-      <?php $node->nid % 2 == 0 ? print 'even nid' : print 'odd nid'; ?>
+      <?php $node->nid % 2 == 0 ? print 'even nid' : print 'odd nid'; //implement 'odd/even' 
+      ?> 
     </div>
   <?php endif; ?>
 
