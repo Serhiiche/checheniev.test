@@ -1,16 +1,7 @@
 <?php
-
-function test_task_theme($existing, $type, $theme, $path) {
-  return array(
-    'node__notes' => array(
-      'render element' => 'content',
-      'base hook' => 'node',
-      'template' => 'node--notes',
-      'path' => drupal_get_path('module', 'test_task') . '/templates',
-    ),
-  );
-}
-
+/**
+ * task 1
+ */
 function test_task_block_info() {
   $blocks['test_task_block'] = array(
     'info' => t('Last 3 nodes (notes)'),
@@ -51,8 +42,20 @@ function test_task_block_view($delta = '') {
   return $block;
 }
 
+function test_task_theme($existing, $type, $theme, $path) {
+  return array(
+    'node__notes' => array(
+      'render element' => 'content',
+      'base hook' => 'node',
+      'template' => 'node--notes',
+      'path' => drupal_get_path('module', 'test_task') . '/templates',
+    ),
+  );
+}
+
 /**
  * Implements hook_views_api().
+ * views code is in the file 'test_task.views_default.inc'
  */
 function test_task_views_api() {
   return array('api' => 3.0);
@@ -136,21 +139,3 @@ function test_task_pane_custom_pane_render($subtype, $conf, $args, $contexts) {
 
   return $block;
 }
-
-/**
- * task 3 - web services
- *//*
-//function ws(){
-  $test_wserv = new WebservicesNodeController;
-  $test_wserv->__construct('GET', WebservicesController::getRequestData(), $args = array(
-   'id' => '5',
-   'action' => NULL,
-   'entity' => '5',
-   'method' => 'index',
-    ));
-
-//$test_wserv->name = "Alex";
-  //return $test_wserv;
-dvm($test_wserv);
-//}
-*/
