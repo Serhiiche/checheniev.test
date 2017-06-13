@@ -11,18 +11,26 @@ git clone https://github.com/Serhiiche/checheniev.test.git
 
 SQL dump is in a root of the site ('checheniev_db.sql').
 
-(current settings.php)
-database checheniev_db
-username root
+(current settings.php) 
+
+database checheniev_db 
+
+username root 
+
 password
 
+===================================
+
 Access to admin:
-login admin
+ 
+login admin 
+
 psswd admin1
 
 ===================================
 
-Tasks number 1, 2, 4 was fulfilled.
+Tasks number 1, 2, 4 was fulfilled. 
+ 
 See custom module in 'sites/all/modules/_custom/test_task'.
 
 ===================================
