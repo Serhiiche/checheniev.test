@@ -81,7 +81,6 @@ function webform_options_nodelist() {
   ->condition('n.type', 'notes')
   ->condition('status', NODE_PUBLISHED)
   ->orderBy('n.created', 'ASC')
-  //->range(0, 20)
   ->execute()
   ->fetchAll();
 
@@ -134,7 +133,19 @@ function last_four_nodes(){
 function test_task_pane_custom_pane_render($subtype, $conf, $args, $contexts) {
 
   $block = new stdClass();
-  $block->title = t('Last 4 nodes (type = notes)');
+  $block->title = $conf['override_title'] ? $conf['override_title_text'] : t('Last 4 nodes (type = notes)');
+  $block->content = last_four_nodes();
+
+  return $block;
+}
+
+/**
+ * 'admin info' callback for panel pane.
+ */
+function test_task_pane_custom_pane_admin_info($subtype, $conf, $contexts) {
+
+  $block = new stdClass;
+  $block->title = $conf['override_title'] ? $conf['override_title_text'] : t('Last 4 nodes (type = notes)');
   $block->content = last_four_nodes();
 
   return $block;
