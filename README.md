@@ -1,7 +1,7 @@
 Drupal Middle test case.
 
 P.S. Please evaluate a junior level developer :)
-----------------------------------
+===================================
 
 To get content use:
 
@@ -18,7 +18,7 @@ password
 Access to admin:
 login admin
 psswd admin1
------------------------------------
+===================================
 
 Tasks number 1, 2, 4 was fulfilled.
 See custom module in 'sites/all/modules/_custom/test_task'.
